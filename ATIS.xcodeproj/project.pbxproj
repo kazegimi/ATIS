@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		44057255208C5C7D00C185FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 44057254208C5C7D00C185FD /* AppDelegate.m */; };
-		44057258208C5C7D00C185FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44057257208C5C7D00C185FD /* ViewController.m */; };
 		4405725B208C5C7D00C185FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44057259208C5C7D00C185FD /* Main.storyboard */; };
 		4405725E208C5C7D00C185FD /* ATIS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4405725C208C5C7D00C185FD /* ATIS.xcdatamodeld */; };
 		44057260208C5C7F00C185FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4405725F208C5C7F00C185FD /* Assets.xcassets */; };
@@ -16,6 +15,11 @@
 		44057266208C5C7F00C185FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 44057265208C5C7F00C185FD /* main.m */; };
 		44057270208C5C7F00C185FD /* ATISTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405726F208C5C7F00C185FD /* ATISTests.m */; };
 		4405727B208C5C7F00C185FD /* ATISUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405727A208C5C7F00C185FD /* ATISUITests.m */; };
+		4405728A208C5CB600C185FD /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44057289208C5CB600C185FD /* MainTableViewController.m */; };
+		4405728D208C5E1000C185FD /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405728C208C5E1000C185FD /* Downloader.m */; };
+		44F6C2D3208C69EA00B24F36 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 44F6C2D2208C69EA00B24F36 /* default.json */; };
+		44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */; };
+		44F6C2D9208C910300B24F36 /* EditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D8208C910300B24F36 /* EditTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +43,6 @@
 		44057250208C5C7D00C185FD /* ATIS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ATIS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44057253208C5C7D00C185FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		44057254208C5C7D00C185FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		44057256208C5C7D00C185FD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		44057257208C5C7D00C185FD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4405725A208C5C7D00C185FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4405725D208C5C7D00C185FD /* ATIS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ATIS.xcdatamodel; sourceTree = "<group>"; };
 		4405725F208C5C7F00C185FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -53,6 +55,15 @@
 		44057276208C5C7F00C185FD /* ATISUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ATISUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4405727A208C5C7F00C185FD /* ATISUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISUITests.m; sourceTree = "<group>"; };
 		4405727C208C5C7F00C185FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44057288208C5CB500C185FD /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
+		44057289208C5CB600C185FD /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
+		4405728B208C5E1000C185FD /* Downloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Downloader.h; sourceTree = "<group>"; };
+		4405728C208C5E1000C185FD /* Downloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Downloader.m; sourceTree = "<group>"; };
+		44F6C2D2208C69EA00B24F36 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
+		44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATISTableViewCell.h; sourceTree = "<group>"; };
+		44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISTableViewCell.m; sourceTree = "<group>"; };
+		44F6C2D7208C910300B24F36 /* EditTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditTableViewController.h; sourceTree = "<group>"; };
+		44F6C2D8208C910300B24F36 /* EditTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,14 +116,21 @@
 			children = (
 				44057253208C5C7D00C185FD /* AppDelegate.h */,
 				44057254208C5C7D00C185FD /* AppDelegate.m */,
-				44057256208C5C7D00C185FD /* ViewController.h */,
-				44057257208C5C7D00C185FD /* ViewController.m */,
 				44057259208C5C7D00C185FD /* Main.storyboard */,
+				44057288208C5CB500C185FD /* MainTableViewController.h */,
+				44057289208C5CB600C185FD /* MainTableViewController.m */,
+				44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */,
+				44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */,
+				44F6C2D7208C910300B24F36 /* EditTableViewController.h */,
+				44F6C2D8208C910300B24F36 /* EditTableViewController.m */,
+				4405728B208C5E1000C185FD /* Downloader.h */,
+				4405728C208C5E1000C185FD /* Downloader.m */,
 				4405725F208C5C7F00C185FD /* Assets.xcassets */,
 				44057261208C5C7F00C185FD /* LaunchScreen.storyboard */,
 				44057264208C5C7F00C185FD /* Info.plist */,
 				44057265208C5C7F00C185FD /* main.m */,
 				4405725C208C5C7D00C185FD /* ATIS.xcdatamodeld */,
+				44F6C2D2208C69EA00B24F36 /* default.json */,
 			);
 			path = ATIS;
 			sourceTree = "<group>";
@@ -239,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				44057263208C5C7F00C185FD /* LaunchScreen.storyboard in Resources */,
+				44F6C2D3208C69EA00B24F36 /* default.json in Resources */,
 				44057260208C5C7F00C185FD /* Assets.xcassets in Resources */,
 				4405725B208C5C7D00C185FD /* Main.storyboard in Resources */,
 			);
@@ -265,10 +284,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44057258208C5C7D00C185FD /* ViewController.m in Sources */,
+				4405728A208C5CB600C185FD /* MainTableViewController.m in Sources */,
 				4405725E208C5C7D00C185FD /* ATIS.xcdatamodeld in Sources */,
+				44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */,
+				4405728D208C5E1000C185FD /* Downloader.m in Sources */,
 				44057266208C5C7F00C185FD /* main.m in Sources */,
 				44057255208C5C7D00C185FD /* AppDelegate.m in Sources */,
+				44F6C2D9208C910300B24F36 /* EditTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +462,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5WD5CMA9WF;
 				INFOPLIST_FILE = ATIS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -457,6 +480,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5WD5CMA9WF;
 				INFOPLIST_FILE = ATIS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

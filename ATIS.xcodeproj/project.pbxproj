@@ -19,7 +19,6 @@
 		4405728D208C5E1000C185FD /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405728C208C5E1000C185FD /* Downloader.m */; };
 		44F6C2D3208C69EA00B24F36 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 44F6C2D2208C69EA00B24F36 /* default.json */; };
 		44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */; };
-		44F6C2D9208C910300B24F36 /* EditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D8208C910300B24F36 /* EditTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,8 +61,6 @@
 		44F6C2D2208C69EA00B24F36 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
 		44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATISTableViewCell.h; sourceTree = "<group>"; };
 		44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISTableViewCell.m; sourceTree = "<group>"; };
-		44F6C2D7208C910300B24F36 /* EditTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditTableViewController.h; sourceTree = "<group>"; };
-		44F6C2D8208C910300B24F36 /* EditTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +111,7 @@
 		44057252208C5C7D00C185FD /* ATIS */ = {
 			isa = PBXGroup;
 			children = (
+				44F6C2DA208CA51200B24F36 /* img */,
 				44057253208C5C7D00C185FD /* AppDelegate.h */,
 				44057254208C5C7D00C185FD /* AppDelegate.m */,
 				44057259208C5C7D00C185FD /* Main.storyboard */,
@@ -121,8 +119,6 @@
 				44057289208C5CB600C185FD /* MainTableViewController.m */,
 				44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */,
 				44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */,
-				44F6C2D7208C910300B24F36 /* EditTableViewController.h */,
-				44F6C2D8208C910300B24F36 /* EditTableViewController.m */,
 				4405728B208C5E1000C185FD /* Downloader.h */,
 				4405728C208C5E1000C185FD /* Downloader.m */,
 				4405725F208C5C7F00C185FD /* Assets.xcassets */,
@@ -151,6 +147,13 @@
 				4405727C208C5C7F00C185FD /* Info.plist */,
 			);
 			path = ATISUITests;
+			sourceTree = "<group>";
+		};
+		44F6C2DA208CA51200B24F36 /* img */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = img;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,7 +293,6 @@
 				4405728D208C5E1000C185FD /* Downloader.m in Sources */,
 				44057266208C5C7F00C185FD /* main.m in Sources */,
 				44057255208C5C7D00C185FD /* AppDelegate.m in Sources */,
-				44F6C2D9208C910300B24F36 /* EditTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

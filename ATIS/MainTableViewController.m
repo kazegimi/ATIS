@@ -14,8 +14,9 @@
 
 @implementation MainTableViewController {
     NSArray *airportsArray;
-    NSArray *ordersArray;
+    NSMutableArray *ordersArray;
     Downloader *downloader;
+    BOOL isEditing;
 }
 
 - (void)viewDidLoad {
@@ -33,6 +34,8 @@
     downloader = [[Downloader alloc] init];
     downloader.delegate = self;
     
+    isEditing = NO;
+    
     [self reload];
 }
 
@@ -42,14 +45,15 @@
 
 - (void)reload {
     airportsArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"airportsArray"];
-    ordersArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"];
+    ordersArray = [NSMutableArray new];
+    ordersArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
     [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return ordersArray.count;
+    return 1;
 }
 
 /*
@@ -67,13 +71,13 @@
  */
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return ordersArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ATISTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    NSString *callsign = ordersArray[indexPath.section];
+    NSString *callsign = ordersArray[indexPath.row];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", callsign];
     NSDictionary *airportDictionary = [[airportsArray filteredArrayUsingPredicate:predicate] firstObject];
     
@@ -83,15 +87,21 @@
     [formatter setDateFormat:@"yyyyMMddHHmm"];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSDate *atisDate = [formatter dateFromString:dateString];
-    float interval = [atisDate timeIntervalSinceNow];
+    if (atisDate) {
+        float interval = [atisDate timeIntervalSinceNow];
+        NSInteger minutes = (NSInteger)fabsf((interval / 60.0f));
+        if (minutes > 999) minutes = 999;
+        cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+    } else {
+        cell.timeLabel.text = @"";
+    }
     
-    cell.callsignLabel.text = ordersArray[indexPath.section];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", (NSInteger)fabsf((interval / 60.0f))];
+    cell.callsignLabel.text = ordersArray[indexPath.row];
     cell.atisLabel.text = airportDictionary[@"atisdat"];
     
     return cell;
 }
-/*
+
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellEditingStyleNone;
 }
@@ -101,9 +111,20 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    [orderArray exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
+    [ordersArray exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
+    [[NSUserDefaults standardUserDefaults] setObject:ordersArray forKey:@"ordersArray"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
- */
+
+- (IBAction)editButton:(id)sender {
+    isEditing = !isEditing;
+    [self.tableView setEditing:isEditing animated:YES];
+    if (isEditing) {
+        [_editButton setTitle:@"完了"];
+    } else {
+        [_editButton setTitle:@"並べ替え"];
+    }
+}
 
 - (IBAction)refreshControl:(id)sender {
     [downloader startDownloading];
@@ -111,10 +132,8 @@
 
 - (void)didFinishDownloadingWithData:(NSData *)data {
     airportsArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    
     [[NSUserDefaults standardUserDefaults] setObject:airportsArray forKey:@"airportsArray"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
     [self.tableView reloadData];
     
     [self.refreshControl endRefreshing];

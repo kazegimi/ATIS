@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--ATIS-->
+        <!--国内ATIS-->
         <scene sceneID="4O9-cr-S04">
             <objects>
                 <tableViewController id="Oc6-dr-Q4D" customClass="MainTableViewController" sceneMemberID="viewController">
@@ -75,10 +75,10 @@
                             <outlet property="delegate" destination="Oc6-dr-Q4D" id="ylf-zG-iiI"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ATIS" id="TfH-KO-eOA">
-                        <barButtonItem key="rightBarButtonItem" title="List" id="NBf-8f-o1Y">
+                    <navigationItem key="navigationItem" title="国内ATIS" id="TfH-KO-eOA">
+                        <barButtonItem key="rightBarButtonItem" title="並べ替え" style="plain" id="NBf-8f-o1Y">
                             <connections>
-                                <segue destination="q7D-sU-NQp" kind="show" id="fPT-m1-Q7S"/>
+                                <action selector="editButton:" destination="Oc6-dr-Q4D" id="BgI-D9-Bhd"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -89,38 +89,13 @@
                             <action selector="refreshControl:" destination="Oc6-dr-Q4D" eventType="valueChanged" id="dw5-hv-qry"/>
                         </connections>
                     </refreshControl>
+                    <connections>
+                        <outlet property="editButton" destination="NBf-8f-o1Y" id="PfB-CO-Iww"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cfU-tV-7ra" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="621.60000000000002" y="157.87106446776613"/>
-        </scene>
-        <!--Edit Table View Controller-->
-        <scene sceneID="fH1-yq-WsL">
-            <objects>
-                <tableViewController id="q7D-sU-NQp" customClass="EditTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Eza-ps-3SR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="cAA-Do-Jpg">
-                                <rect key="frame" x="0.0" y="28" width="375" height="55"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cAA-Do-Jpg" id="Lqa-cY-GLc">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="54.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="q7D-sU-NQp" id="3Js-q1-WyK"/>
-                            <outlet property="delegate" destination="q7D-sU-NQp" id="hqD-Ja-sW4"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fOH-dh-C6F" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1409" y="158"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="sGg-xV-3Rz">

@@ -13,6 +13,8 @@
 
 @interface MainTableViewController : UITableViewController <DownloaderDelegate>
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
+- (IBAction)editButton:(id)sender;
 - (IBAction)refreshControl:(id)sender;
 
 @end

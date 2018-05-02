@@ -44,7 +44,8 @@
 }
 
 - (void)reload {
-    airportsArray = [[NSUserDefaults standardUserDefaults] objectForKey:@"airportsArray"];
+    NSData *airportsArrayData = [[NSUserDefaults standardUserDefaults] objectForKey:@"airportsArrayData"];
+    airportsArray = [NSJSONSerialization JSONObjectWithData:airportsArrayData options:kNilOptions error:nil];
     ordersArray = [NSMutableArray new];
     ordersArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
     [self.tableView reloadData];
@@ -78,26 +79,30 @@
     ATISTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
     NSString *callsign = ordersArray[indexPath.row];
+    cell.callsignLabel.text = ordersArray[indexPath.row];
+    cell.timeLabel.text = @"NO DATA";
+    cell.atisLabel.text = @"NO DATA";
+    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", callsign];
     NSDictionary *airportDictionary = [[airportsArray filteredArrayUsingPredicate:predicate] firstObject];
-    
-    // 時間計算
-    NSString *dateString = airportDictionary[@"atistime"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyyMMddHHmm"];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSDate *atisDate = [formatter dateFromString:dateString];
-    if (atisDate) {
-        float interval = [atisDate timeIntervalSinceNow];
-        NSInteger minutes = (NSInteger)fabsf((interval / 60.0f));
-        if (minutes > 999) minutes = 999;
-        cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
-    } else {
-        cell.timeLabel.text = @"";
+    if (airportDictionary.count != 0) {
+        // 時間計算
+        NSString *dateString = airportDictionary[@"atistime"];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"yyyyMMddHHmm"];
+        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        NSDate *atisDate = [formatter dateFromString:dateString];
+        if (atisDate) {
+            float interval = [atisDate timeIntervalSinceNow];
+            NSInteger minutes = (NSInteger)fabsf((interval / 60.0f));
+            if (minutes > 999) minutes = 999;
+            cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+        } else {
+            cell.timeLabel.text = @"";
+        }
+        
+        cell.atisLabel.text = airportDictionary[@"atisdat"];
     }
-    
-    cell.callsignLabel.text = ordersArray[indexPath.row];
-    cell.atisLabel.text = airportDictionary[@"atisdat"];
     
     return cell;
 }
@@ -131,9 +136,10 @@
 }
 
 - (void)didFinishDownloadingWithData:(NSData *)data {
-    airportsArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    [[NSUserDefaults standardUserDefaults] setObject:airportsArray forKey:@"airportsArray"];
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"airportsArrayData"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    airportsArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
     [self.tableView reloadData];
     
     [self.refreshControl endRefreshing];

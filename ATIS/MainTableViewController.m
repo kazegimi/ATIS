@@ -45,7 +45,9 @@
 
 - (void)reload {
     NSData *airportsArrayData = [[NSUserDefaults standardUserDefaults] objectForKey:@"airportsArrayData"];
-    airportsArray = [NSJSONSerialization JSONObjectWithData:airportsArrayData options:kNilOptions error:nil];
+    if (airportsArrayData) {
+        airportsArray = [NSJSONSerialization JSONObjectWithData:airportsArrayData options:kNilOptions error:nil];
+    }
     ordersArray = [NSMutableArray new];
     ordersArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
     [self.tableView reloadData];

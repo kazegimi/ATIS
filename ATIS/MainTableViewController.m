@@ -77,10 +77,12 @@
     atisDownloader.delegate = self;
     
     isEditing = NO;
+    
+    [self reload];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self reload];
+    //[self reload];
 }
 
 - (void)reload {
@@ -149,7 +151,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {

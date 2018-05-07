@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 
 #import "ATISTableViewCell.h"
-#import "Downloader.h"
+#import "ATISDownloader.h"
+#import "TAFMETARTableViewController.h"
 
-@interface MainTableViewController : UITableViewController <DownloaderDelegate>
+@interface MainTableViewController : UITableViewController <ATISDownloaderDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 - (IBAction)editButton:(id)sender;

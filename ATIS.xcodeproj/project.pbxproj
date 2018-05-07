@@ -16,7 +16,9 @@
 		44057270208C5C7F00C185FD /* ATISTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405726F208C5C7F00C185FD /* ATISTests.m */; };
 		4405727B208C5C7F00C185FD /* ATISUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405727A208C5C7F00C185FD /* ATISUITests.m */; };
 		4405728A208C5CB600C185FD /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44057289208C5CB600C185FD /* MainTableViewController.m */; };
-		4405728D208C5E1000C185FD /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4405728C208C5E1000C185FD /* Downloader.m */; };
+		44992B9D209D93C600FCF002 /* TAFMETARTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992B9C209D93C600FCF002 /* TAFMETARTableViewController.m */; };
+		44992BA0209FD2BD00FCF002 /* ATISDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992B9F209FD2BD00FCF002 /* ATISDownloader.m */; };
+		44992BA3209FD3C600FCF002 /* TAFMETARDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992BA2209FD3C600FCF002 /* TAFMETARDownloader.m */; };
 		44F6C2D3208C69EA00B24F36 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 44F6C2D2208C69EA00B24F36 /* default.json */; };
 		44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */; };
 /* End PBXBuildFile section */
@@ -56,8 +58,12 @@
 		4405727C208C5C7F00C185FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		44057288208C5CB500C185FD /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
 		44057289208C5CB600C185FD /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
-		4405728B208C5E1000C185FD /* Downloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Downloader.h; sourceTree = "<group>"; };
-		4405728C208C5E1000C185FD /* Downloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Downloader.m; sourceTree = "<group>"; };
+		44992B9B209D93C600FCF002 /* TAFMETARTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAFMETARTableViewController.h; sourceTree = "<group>"; };
+		44992B9C209D93C600FCF002 /* TAFMETARTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAFMETARTableViewController.m; sourceTree = "<group>"; };
+		44992B9E209FD2BD00FCF002 /* ATISDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATISDownloader.h; sourceTree = "<group>"; };
+		44992B9F209FD2BD00FCF002 /* ATISDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISDownloader.m; sourceTree = "<group>"; };
+		44992BA1209FD3C600FCF002 /* TAFMETARDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAFMETARDownloader.h; sourceTree = "<group>"; };
+		44992BA2209FD3C600FCF002 /* TAFMETARDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAFMETARDownloader.m; sourceTree = "<group>"; };
 		44F6C2D2208C69EA00B24F36 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
 		44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATISTableViewCell.h; sourceTree = "<group>"; };
 		44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISTableViewCell.m; sourceTree = "<group>"; };
@@ -119,8 +125,12 @@
 				44057289208C5CB600C185FD /* MainTableViewController.m */,
 				44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */,
 				44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */,
-				4405728B208C5E1000C185FD /* Downloader.h */,
-				4405728C208C5E1000C185FD /* Downloader.m */,
+				44992B9B209D93C600FCF002 /* TAFMETARTableViewController.h */,
+				44992B9C209D93C600FCF002 /* TAFMETARTableViewController.m */,
+				44992B9E209FD2BD00FCF002 /* ATISDownloader.h */,
+				44992B9F209FD2BD00FCF002 /* ATISDownloader.m */,
+				44992BA1209FD3C600FCF002 /* TAFMETARDownloader.h */,
+				44992BA2209FD3C600FCF002 /* TAFMETARDownloader.m */,
 				4405725F208C5C7F00C185FD /* Assets.xcassets */,
 				44057261208C5C7F00C185FD /* LaunchScreen.storyboard */,
 				44057264208C5C7F00C185FD /* Info.plist */,
@@ -289,8 +299,10 @@
 			files = (
 				4405728A208C5CB600C185FD /* MainTableViewController.m in Sources */,
 				4405725E208C5C7D00C185FD /* ATIS.xcdatamodeld in Sources */,
+				44992BA3209FD3C600FCF002 /* TAFMETARDownloader.m in Sources */,
+				44992B9D209D93C600FCF002 /* TAFMETARTableViewController.m in Sources */,
+				44992BA0209FD2BD00FCF002 /* ATISDownloader.m in Sources */,
 				44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */,
-				4405728D208C5E1000C185FD /* Downloader.m in Sources */,
 				44057266208C5C7F00C185FD /* main.m in Sources */,
 				44057255208C5C7D00C185FD /* AppDelegate.m in Sources */,
 			);

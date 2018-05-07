@@ -7,36 +7,74 @@
 //
 
 #import "MainTableViewController.h"
+#import "AppDelegate.h" // CoreData用
 
 @interface MainTableViewController ()
+
+@property (strong, nonatomic) NSManagedObjectContext *conext;
 
 @end
 
 @implementation MainTableViewController {
-    NSArray *airportsArray;
-    NSMutableArray *ordersArray;
-    Downloader *downloader;
+    // CoreData用
+    AppDelegate *appDelegate;
+    NSManagedObjectContext *context;
+
+    NSMutableOrderedSet *ordersSet;
+    ATISDownloader *atisDownloader;
     BOOL isEditing;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // NSUserDefaultの初期化
-    NSMutableDictionary *keyValues = [NSMutableDictionary dictionary];
-    [keyValues setObject:@[] forKey:@"airportsArray"];
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"default" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSArray *defaultOrdersArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    [keyValues setObject:defaultOrdersArray forKey:@"ordersArray"];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:keyValues];
+    // CoreDataの準備
+    appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    context = appDelegate.persistentContainer.viewContext;
     
-    downloader = [[Downloader alloc] init];
-    downloader.delegate = self;
+    /*
+    // データ取得
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+     */
+    
+    /*
+    // データの挿入
+    NSManagedObject *airport = [NSEntityDescription insertNewObjectForEntityForName:@"Airport" inManagedObjectContext:context];
+    [airport setValue:defaultOrdersArray[i] forKey:@"callsign"];
+     [appDelegate saveContext];
+     */
+    
+    /*
+    // 全データ削除
+    for (NSManagedObject *managedObject in results) {
+        [context deleteObject:managedObject];
+    }
+    [appDelegate saveContext];
+     */
+    
+    /*
+    // データ検索
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", @"RJAA"];
+    [request setEntity:entity];
+    [request setPredicate:predicate];
+    NSArray *results = [context executeFetchRequest:request error:nil];
+     */
+    
+    /*
+    // データ削除
+    for (NSManagedObject *managedObject in results) {
+        [context deleteObject:managedObject];
+    }
+    [appDelegate saveContext];
+     */
+    
+    atisDownloader = [[ATISDownloader alloc] init];
+    atisDownloader.delegate = self;
     
     isEditing = NO;
-    
-    [self reload];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -44,12 +82,8 @@
 }
 
 - (void)reload {
-    NSData *airportsArrayData = [[NSUserDefaults standardUserDefaults] objectForKey:@"airportsArrayData"];
-    if (airportsArrayData) {
-        airportsArray = [NSJSONSerialization JSONObjectWithData:airportsArrayData options:kNilOptions error:nil];
-    }
-    ordersArray = [NSMutableArray new];
-    ordersArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
+    ordersSet = [NSMutableOrderedSet new];
+    ordersSet = [NSMutableOrderedSet orderedSetWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
     [self.tableView reloadData];
 }
 
@@ -74,22 +108,26 @@
  */
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ordersArray.count;
+    return ordersSet.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ATISTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     
-    NSString *callsign = ordersArray[indexPath.row];
-    cell.callsignLabel.text = ordersArray[indexPath.row];
-    cell.timeLabel.text = @"NO DATA";
-    cell.atisLabel.text = @"NO DATA";
+    NSString *callsign = ordersSet[indexPath.row];
+    cell.callsignLabel.text = ordersSet[indexPath.row];
+    //cell.timeLabel.text = @"NO DATA";
+    //cell.atisLabel.text = @"NO DATA";
     
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", callsign];
-    NSDictionary *airportDictionary = [[airportsArray filteredArrayUsingPredicate:predicate] firstObject];
-    if (airportDictionary.count != 0) {
+    [request setEntity:entity];
+    [request setPredicate:predicate];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    if (result.count != 0) {
         // 時間計算
-        NSString *dateString = airportDictionary[@"atistime"];
+        NSString *dateString = [result[0] valueForKey:@"atistime"];
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"yyyyMMddHHmm"];
         [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -103,10 +141,14 @@
             cell.timeLabel.text = @"";
         }
         
-        cell.atisLabel.text = airportDictionary[@"atisdat"];
+        cell.atisLabel.text = [result[0] valueForKey:@"atisdat"];
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -118,8 +160,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    [ordersArray exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
-    [[NSUserDefaults standardUserDefaults] setObject:ordersArray forKey:@"ordersArray"];
+    [ordersSet exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
+    [[NSUserDefaults standardUserDefaults] setObject:[ordersSet array] forKey:@"ordersArray"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -134,20 +176,39 @@
 }
 
 - (IBAction)refreshControl:(id)sender {
-    [downloader startDownloading];
+    [atisDownloader startDownloadingATIS];
 }
 
-- (void)didFinishDownloadingWithData:(NSData *)data {
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"airportsArrayData"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    airportsArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-    [self.tableView reloadData];
-    
+- (void)didFinishDownloadingATISWithData:(NSData *)data {
+    NSArray *atisArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    for (NSDictionary *atis in atisArray) {
+        NSString *callsign = atis[@"callsign"];
+        [ordersSet addObject:callsign];
+        [[NSUserDefaults standardUserDefaults] setObject:[ordersSet array] forKey:@"ordersArray"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", callsign];
+        [request setEntity:entity];
+        [request setPredicate:predicate];
+        NSArray *result = [context executeFetchRequest:request error:nil];
+        NSManagedObject *airport;
+        if (result.count == 0) {
+            airport = [NSEntityDescription insertNewObjectForEntityForName:@"Airport" inManagedObjectContext:context];
+        } else {
+            airport = result[0];
+        }
+        [airport setValue:atis[@"callsign"] forKey:@"callsign"];
+        [airport setValue:atis[@"atistime"] forKey:@"atistime"];
+        [airport setValue:atis[@"atisdat"] forKey:@"atisdat"];
+        [appDelegate saveContext];
+    }
+    [self reload];
     [self.refreshControl endRefreshing];
 }
 
-- (void)didFailDownloading {
+- (void)didFailDownloadingATIS {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed Downloading" message:@"Check your internet connection." preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -155,6 +216,14 @@
     }]];
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"TAFMETARSegue"]) {
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        TAFMETARTableViewController *tafMetarTableViewController = segue.destinationViewController;
+        tafMetarTableViewController.callsign = ordersSet[indexPath.row];
+    }
 }
     
 - (void)didReceiveMemoryWarning {

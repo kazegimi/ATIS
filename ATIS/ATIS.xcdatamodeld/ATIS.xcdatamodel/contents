@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E199" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Airport" representedClassName="" syncable="YES">
+        <attribute name="atisdat" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
+        <attribute name="atistime" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
+        <attribute name="callsign" attributeType="String" syncable="YES"/>
+        <attribute name="metar" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
+        <attribute name="taf" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Airport" positionX="-63" positionY="-18" width="128" height="118"/>
+    </elements>
 </model>

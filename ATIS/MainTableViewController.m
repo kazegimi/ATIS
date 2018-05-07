@@ -71,6 +71,8 @@
     [appDelegate saveContext];
      */
     
+    ordersSet = [NSMutableOrderedSet new];
+    
     atisDownloader = [[ATISDownloader alloc] init];
     atisDownloader.delegate = self;
     
@@ -82,7 +84,6 @@
 }
 
 - (void)reload {
-    ordersSet = [NSMutableOrderedSet new];
     ordersSet = [NSMutableOrderedSet orderedSetWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"ordersArray"]];
     [self.tableView reloadData];
 }
@@ -160,7 +161,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    [ordersSet exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
+    id object = [ordersSet objectAtIndex:fromIndexPath.row];
+    [ordersSet removeObjectAtIndex:fromIndexPath.row];
+    [ordersSet insertObject:object atIndex:toIndexPath.row];
     [[NSUserDefaults standardUserDefaults] setObject:[ordersSet array] forKey:@"ordersArray"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

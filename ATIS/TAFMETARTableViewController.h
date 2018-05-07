@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "TAFMETARTableViewCell.h"
 #import "TAFMETARDownloader.h"
 
 @interface TAFMETARTableViewController : UITableViewController <TAFMETARDownloaderDelegate>

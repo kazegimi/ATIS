@@ -19,6 +19,7 @@
 		44992B9D209D93C600FCF002 /* TAFMETARTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992B9C209D93C600FCF002 /* TAFMETARTableViewController.m */; };
 		44992BA0209FD2BD00FCF002 /* ATISDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992B9F209FD2BD00FCF002 /* ATISDownloader.m */; };
 		44992BA3209FD3C600FCF002 /* TAFMETARDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992BA2209FD3C600FCF002 /* TAFMETARDownloader.m */; };
+		44992BAF20A07C8C00FCF002 /* TAFMETARTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44992BAE20A07C8C00FCF002 /* TAFMETARTableViewCell.m */; };
 		44F6C2D3208C69EA00B24F36 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 44F6C2D2208C69EA00B24F36 /* default.json */; };
 		44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,8 @@
 		44992B9F209FD2BD00FCF002 /* ATISDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISDownloader.m; sourceTree = "<group>"; };
 		44992BA1209FD3C600FCF002 /* TAFMETARDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAFMETARDownloader.h; sourceTree = "<group>"; };
 		44992BA2209FD3C600FCF002 /* TAFMETARDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAFMETARDownloader.m; sourceTree = "<group>"; };
+		44992BAD20A07C8C00FCF002 /* TAFMETARTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAFMETARTableViewCell.h; sourceTree = "<group>"; };
+		44992BAE20A07C8C00FCF002 /* TAFMETARTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAFMETARTableViewCell.m; sourceTree = "<group>"; };
 		44F6C2D2208C69EA00B24F36 /* default.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
 		44F6C2D4208C79A200B24F36 /* ATISTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ATISTableViewCell.h; sourceTree = "<group>"; };
 		44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ATISTableViewCell.m; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				44F6C2D5208C79A200B24F36 /* ATISTableViewCell.m */,
 				44992B9B209D93C600FCF002 /* TAFMETARTableViewController.h */,
 				44992B9C209D93C600FCF002 /* TAFMETARTableViewController.m */,
+				44992BAD20A07C8C00FCF002 /* TAFMETARTableViewCell.h */,
+				44992BAE20A07C8C00FCF002 /* TAFMETARTableViewCell.m */,
 				44992B9E209FD2BD00FCF002 /* ATISDownloader.h */,
 				44992B9F209FD2BD00FCF002 /* ATISDownloader.m */,
 				44992BA1209FD3C600FCF002 /* TAFMETARDownloader.h */,
@@ -302,6 +307,7 @@
 				44992BA3209FD3C600FCF002 /* TAFMETARDownloader.m in Sources */,
 				44992B9D209D93C600FCF002 /* TAFMETARTableViewController.m in Sources */,
 				44992BA0209FD2BD00FCF002 /* ATISDownloader.m in Sources */,
+				44992BAF20A07C8C00FCF002 /* TAFMETARTableViewCell.m in Sources */,
 				44F6C2D6208C79A200B24F36 /* ATISTableViewCell.m in Sources */,
 				44057266208C5C7F00C185FD /* main.m in Sources */,
 				44057255208C5C7D00C185FD /* AppDelegate.m in Sources */,

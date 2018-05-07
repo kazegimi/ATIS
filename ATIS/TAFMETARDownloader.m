@@ -26,7 +26,7 @@
                                                           delegate:self
                                                      delegateQueue:[NSOperationQueue mainQueue]];
     
-    NSString *urlString = [NSString stringWithFormat:@"https://api.checkwx.com/taf/%@", _callsign];
+    NSString *urlString = [NSString stringWithFormat:@"https://api.checkwx.com/taf/%@/decoded", _callsign];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:10.0];
@@ -46,7 +46,7 @@
                                                           delegate:self
                                                      delegateQueue:[NSOperationQueue mainQueue]];
     
-    NSString *urlString = [NSString stringWithFormat:@"https://api.checkwx.com/metar/%@", _callsign];
+    NSString *urlString = [NSString stringWithFormat:@"https://api.checkwx.com/metar/%@/decoded", _callsign];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:10.0];
@@ -74,26 +74,30 @@
     if (!error) {
         // 成功時の処理
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:mutableData options:kNilOptions error:nil];
-        NSString *string = dictionary[@"data"][0];
+        NSDictionary *dataDictionary = dictionary[@"data"][0];
+        NSLog(@"%@", dataDictionary);
+        NSString *rawText = dataDictionary[@"raw_text"];
         
-        if (!string) {
+        if (!rawText) {
             [self.delegate didFailDownloadingTAFMETAR];
             return;
         }
         
         // 改行の挿入
-        string = [string stringByReplacingOccurrencesOfString:@"BECMG" withString:@"\nBECMG"];
-        string = [string stringByReplacingOccurrencesOfString:@"TEMPO" withString:@"\nTEMPO"];
-        string = [string stringByReplacingOccurrencesOfString:@"RMK" withString:@"\nRMK"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"BECMG" withString:@"\nBECMG"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"TEMPO" withString:@"\nTEMPO"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"RMK" withString:@"\nRMK"];
         
         switch (sequence) {
             case 0:
-                [tafMetarDictionary setObject:string forKey:@"taf"];
+                [tafMetarDictionary setObject:rawText forKey:@"taf"];
+                [tafMetarDictionary setObject:dataDictionary[@"timestamp"][@"valid_to"] forKey:@"taf_valid_to"];
                 [self startDownloadingMETAR];
                 break;
                 
             case 1:
-                [tafMetarDictionary setObject:string forKey:@"metar"];
+                [tafMetarDictionary setObject:rawText forKey:@"metar"];
+                [tafMetarDictionary setObject:dataDictionary[@"observed"] forKey:@"metar_observed"];
                 [self didFinishDownloading];
                 break;
                 

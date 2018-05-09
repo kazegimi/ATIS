@@ -28,6 +28,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // UTC表示
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm"];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSString *utcString = [formatter stringFromDate:[NSDate date]];
+    _utcLabel.text = [NSString stringWithFormat:@"%@Z", utcString];
+    
     // CoreDataの準備
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     context = appDelegate.persistentContainer.viewContext;
@@ -82,7 +89,12 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    //[self reload];
+    // UTC表示
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm"];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    NSString *utcString = [formatter stringFromDate:[NSDate date]];
+    _utcLabel.text = [NSString stringWithFormat:@"%@Z", utcString];
 }
 
 - (void)reload {
@@ -119,8 +131,8 @@
     
     NSString *callsign = ordersSet[indexPath.row];
     cell.callsignLabel.text = ordersSet[indexPath.row];
-    //cell.timeLabel.text = @"NO DATA";
-    //cell.atisLabel.text = @"NO DATA";
+    cell.timeLabel.text = @"NO DATA";
+    cell.atisLabel.text = @"NO DATA";
     
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
@@ -129,24 +141,24 @@
     [request setPredicate:predicate];
     NSArray *result = [context executeFetchRequest:request error:nil];
     if (result.count != 0) {
-        // 時間計算
-        NSString *dateString = [result[0] valueForKey:@"atistime"];
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateFormat:@"yyyyMMddHHmm"];
-        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        NSDate *atisDate = [formatter dateFromString:dateString];
-        if (atisDate) {
-            float interval = [atisDate timeIntervalSinceNow];
-            NSInteger minutes = (NSInteger)fabsf((interval / 60.0f));
-            if (minutes > 999) minutes = 999;
-            cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
-        } else {
-            cell.timeLabel.text = @"";
+        if (![[result[0] valueForKey:@"atisdat"] isEqualToString:@""]) {
+            // 時間計算
+            if (![[result[0] valueForKey:@"atistime"] isEqualToString:@""]) {
+                NSString *dateString = [result[0] valueForKey:@"atistime"];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateFormat:@"yyyyMMddHHmm"];
+                [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                NSDate *atisDate = [formatter dateFromString:dateString];
+                if (atisDate) {
+                    float interval = [atisDate timeIntervalSinceNow];
+                    NSInteger minutes = (NSInteger)fabsf(interval / 60.0f);
+                    if (minutes > 999) minutes = 999;
+                    cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+                }
+                cell.atisLabel.text = [result[0] valueForKey:@"atisdat"];
+            }
         }
-        
-        cell.atisLabel.text = [result[0] valueForKey:@"atisdat"];
     }
-    
     return cell;
 }
 
@@ -205,7 +217,11 @@
             airport = result[0];
         }
         [airport setValue:atis[@"callsign"] forKey:@"callsign"];
-        [airport setValue:atis[@"atistime"] forKey:@"atistime"];
+        if (![atis[@"atistime"] isEqual:[NSNull null]]) {
+            [airport setValue:atis[@"atistime"] forKey:@"atistime"];
+        } else {
+            [airport setValue:@"" forKey:@"atistime"];
+        }
         [airport setValue:atis[@"atisdat"] forKey:@"atisdat"];
         [appDelegate saveContext];
     }

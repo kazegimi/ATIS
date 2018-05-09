@@ -16,6 +16,7 @@
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *editButton;
 - (IBAction)editButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *utcLabel;
 - (IBAction)refreshControl:(id)sender;
 
 @end

@@ -7,9 +7,11 @@
         <attribute name="metar" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
         <attribute name="metar_observed" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taf" optional="YES" attributeType="String" defaultValueString="NO DATA" syncable="YES"/>
+        <attribute name="taf_issued" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="taf_valid_from" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="taf_valid_to" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Airport" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="Airport" positionX="-63" positionY="-18" width="128" height="178"/>
     </elements>
 </model>

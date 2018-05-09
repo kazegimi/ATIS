@@ -76,22 +76,28 @@
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:mutableData options:kNilOptions error:nil];
         NSDictionary *dataDictionary = dictionary[@"data"][0];
         NSLog(@"%@", dataDictionary);
-        NSString *rawText = dataDictionary[@"raw_text"];
-        
-        if (!rawText) {
+        // "**** TAF Currently Unavailable"の場合、NSStringが返ってくる
+        NSString *className = NSStringFromClass([dataDictionary class]);
+        NSString *rawText = @"";
+        if ([className isEqualToString:@"__NSCFString"]) {
             [self.delegate didFailDownloadingTAFMETAR];
             return;
+        } else {
+            rawText = dataDictionary[@"raw_text"];
         }
         
         // 改行の挿入
-        rawText = [rawText stringByReplacingOccurrencesOfString:@"BECMG" withString:@"\nBECMG"];
-        rawText = [rawText stringByReplacingOccurrencesOfString:@"TEMPO" withString:@"\nTEMPO"];
-        rawText = [rawText stringByReplacingOccurrencesOfString:@"RMK" withString:@"\nRMK"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"TAF " withString:@""];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"BECMG" withString:@"\n  BECMG"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"TEMPO" withString:@"\n  TEMPO"];
+        rawText = [rawText stringByReplacingOccurrencesOfString:@"RMK" withString:@"\n  RMK"];
         
         switch (sequence) {
             case 0:
                 [tafMetarDictionary setObject:rawText forKey:@"taf"];
+                [tafMetarDictionary setObject:dataDictionary[@"timestamp"][@"valid_from"] forKey:@"taf_valid_from"];
                 [tafMetarDictionary setObject:dataDictionary[@"timestamp"][@"valid_to"] forKey:@"taf_valid_to"];
+                [tafMetarDictionary setObject:dataDictionary[@"timestamp"][@"issued"] forKey:@"taf_issued"];
                 [self startDownloadingMETAR];
                 break;
                 

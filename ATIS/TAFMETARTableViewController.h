@@ -14,6 +14,7 @@
 @interface TAFMETARTableViewController : UITableViewController <TAFMETARDownloaderDelegate>
 
 @property (nonatomic) NSString *callsign;
+@property (weak, nonatomic) IBOutlet UILabel *utcLabel;
 
 - (IBAction)refreshControl:(id)sender;
 

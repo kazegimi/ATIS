@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 
 #import "TAFMETARTableViewCell.h"
-#import "TAFMETARDownloader.h"
+#import "TAFDownloader.h"
+#import "METARDownloader.h"
 
-@interface TAFMETARTableViewController : UITableViewController <TAFMETARDownloaderDelegate>
+@interface TAFMETARTableViewController : UITableViewController <TAFDownloaderDelegate, METARDownloaderDelegate>
 
 @property (nonatomic) NSString *callsign;
 @property (weak, nonatomic) IBOutlet UILabel *utcLabel;

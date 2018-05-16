@@ -14,14 +14,23 @@
 @end
 
 @implementation TAFMETARTableViewController {
+    NSTimer *timer;
+    // CoreData用
     AppDelegate *appDelegate;
     NSManagedObjectContext *context;
     
-    TAFMETARDownloader *tafMetarDownloader;
+    TAFDownloader *tafDownloader;
+    METARDownloader *metarDownloader;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(timer:)
+                                           userInfo:nil
+                                            repeats:YES];
     
     // CoreDataの準備
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -29,22 +38,34 @@
     
     self.title = _callsign;
     
-    tafMetarDownloader = [[TAFMETARDownloader alloc] init];
-    tafMetarDownloader.delegate = self;
-    tafMetarDownloader.callsign = _callsign;
+    tafDownloader = [[TAFDownloader alloc] init];
+    tafDownloader.delegate = self;
+    tafDownloader.callsign = _callsign;
+    
+    metarDownloader = [[METARDownloader alloc] init];
+    metarDownloader.delegate = self;
+    metarDownloader.callsign = _callsign;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self showUTC];
+}
+
+- (void)timer:(NSTimer *)timer {
+    [self showUTC];
+}
+
+- (void)showUTC {
     // UTC表示
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
+    [formatter setDateFormat:@"dd HH:mm"];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSString *utcString = [formatter stringFromDate:[NSDate date]];
     _utcLabel.text = [NSString stringWithFormat:@"%@Z", utcString];
 }
 
 - (IBAction)refreshControl:(id)sender {
-    [tafMetarDownloader startDownloadingTAFMETAR];
+    [tafDownloader startDownloadingTAF];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,11 +127,14 @@
                     float interval = [date timeIntervalSinceNow];
                     NSInteger minutes = (NSInteger)fabsf(interval / 60.0f);
                     if (minutes < 60) {
-                        [timeText appendString:[NSString stringWithFormat:@"%ld分前発行", minutes]];
+                        [timeText appendString:[NSString stringWithFormat:@"(発行%ld分前)", minutes]];
                     } else {
                         NSInteger hours = (NSInteger)roundf(minutes / 60.0f);
-                        if (hours > 99) hours = 99;
-                        [timeText appendString:[NSString stringWithFormat:@"%ld時間前発行", hours]];
+                        if (hours > 99) {
+                            [timeText appendString:@"(発行99時間以上前)"];
+                        } else {
+                            [timeText appendString:[NSString stringWithFormat:@"(発行%ld時間前)", hours]];
+                        }
                     }
                 }
                 
@@ -130,8 +154,11 @@
                                 string = [NSString stringWithFormat:@" 範囲外(%ld分後から有効)", minutesFrom];
                             } else {
                                 NSInteger hoursFrom = (NSInteger)roundf(minutesFrom / 60.0f);
-                                if (hoursFrom > 99) hoursFrom = 99;
-                                string = [NSString stringWithFormat:@" 範囲外(%ld時間後から有効)", hoursFrom];
+                                if (hoursFrom > 99) {
+                                    string = @" 範囲外(99時間以上後から有効)";
+                                } else {
+                                    string = [NSString stringWithFormat:@" 範囲外(%ld時間後から有効)", hoursFrom];
+                                }
                             }
                             [timeText appendString:string];
                         } else {
@@ -141,8 +168,11 @@
                                 string = [NSString stringWithFormat:@" 範囲外(%ld分前に終了)", minutesTo];
                             } else {
                                 NSInteger hoursTo = (NSInteger)roundf(minutesTo / 60.0f);
-                                if (hoursTo > 99) hoursTo = 99;
-                                string = [NSString stringWithFormat:@" 範囲外(%ld時間前に終了)", hoursTo];
+                                if (hoursTo > 99) {
+                                    string = @" 範囲外(99時間以上前に終了)";
+                                } else {
+                                    string = [NSString stringWithFormat:@" 範囲外(%ld時間前に終了)", hoursTo];
+                                }
                             }
                             [timeText appendString:string];
                         }
@@ -178,8 +208,11 @@
                 if (date) {
                     float interval = [date timeIntervalSinceNow];
                     NSInteger minutes = (NSInteger)fabsf(interval / 60.0f);
-                    if (minutes > 999) minutes = 999;
-                    cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+                    if (minutes > 999) {
+                        cell.timeLabel.text = @"999分以上前";
+                    } else {
+                        cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+                    }
                 }
                 break;
             }
@@ -192,7 +225,7 @@
     return cell;
 }
 
-- (void)didFinishDownloadingTAFMETARWithData:(NSDictionary *)tafMetarDictionary {
+- (void)didFinishDownloadingTAFWithData:(NSDictionary *)tafDictionary {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", _callsign];
@@ -201,12 +234,28 @@
     NSArray *result = [context executeFetchRequest:request error:nil];
     if (result.count != 0) {
         NSManagedObject *airport = result[0];
-        [airport setValue:tafMetarDictionary[@"taf"] forKey:@"taf"];
-        [airport setValue:tafMetarDictionary[@"taf_valid_from"] forKey:@"taf_valid_from"];
-        [airport setValue:tafMetarDictionary[@"taf_valid_to"] forKey:@"taf_valid_to"];
-        [airport setValue:tafMetarDictionary[@"taf_issued"] forKey:@"taf_issued"];
-        [airport setValue:tafMetarDictionary[@"metar"] forKey:@"metar"];
-        [airport setValue:tafMetarDictionary[@"metar_observed"] forKey:@"metar_observed"];
+        [airport setValue:tafDictionary[@"taf"] forKey:@"taf"];
+        [airport setValue:tafDictionary[@"taf_valid_from"] forKey:@"taf_valid_from"];
+        [airport setValue:tafDictionary[@"taf_valid_to"] forKey:@"taf_valid_to"];
+        [airport setValue:tafDictionary[@"taf_issued"] forKey:@"taf_issued"];
+        [appDelegate saveContext];
+    }
+    
+    [self.tableView reloadData];
+    [metarDownloader startDownloadingMETAR];
+}
+
+- (void)didFinishDownloadingMETARWithData:(NSDictionary *)metarDictionary {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Airport"];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Airport" inManagedObjectContext:context];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"callsign like %@", _callsign];
+    [request setEntity:entity];
+    [request setPredicate:predicate];
+    NSArray *result = [context executeFetchRequest:request error:nil];
+    if (result.count != 0) {
+        NSManagedObject *airport = result[0];
+        [airport setValue:metarDictionary[@"metar"] forKey:@"metar"];
+        [airport setValue:metarDictionary[@"metar_observed"] forKey:@"metar_observed"];
         [appDelegate saveContext];
     }
     
@@ -214,8 +263,18 @@
     [self.refreshControl endRefreshing];
 }
 
-- (void)didFailDownloadingTAFMETAR {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed Downloading" message:@"Check your internet connection." preferredStyle:UIAlertControllerStyleAlert];
+- (void)didFailDownloadingTAF {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed Downloading TAF" message:@"Check your internet connection." preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self.refreshControl endRefreshing];
+    }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void)didFailDownloadingMETAR {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Failed Downloading METAR" message:@"Check your internet connection." preferredStyle:UIAlertControllerStyleAlert];
     
     [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self.refreshControl endRefreshing];

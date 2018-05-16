@@ -7,7 +7,8 @@
 //
 
 #import "MainTableViewController.h"
-#import "AppDelegate.h" // CoreData用
+// CoreData用
+#import "AppDelegate.h"
 
 @interface MainTableViewController ()
 
@@ -16,6 +17,7 @@
 @end
 
 @implementation MainTableViewController {
+    NSTimer *timer;
     // CoreData用
     AppDelegate *appDelegate;
     NSManagedObjectContext *context;
@@ -28,12 +30,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // UTC表示
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    NSString *utcString = [formatter stringFromDate:[NSDate date]];
-    _utcLabel.text = [NSString stringWithFormat:@"%@Z", utcString];
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                             target:self
+                                           selector:@selector(timer:)
+                                           userInfo:nil
+                                            repeats:YES];
     
     // CoreDataの準備
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -89,9 +90,17 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self showUTC];
+}
+
+- (void)timer:(NSTimer *)timer {
+    [self showUTC];
+}
+
+- (void)showUTC {
     // UTC表示
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
+    [formatter setDateFormat:@"dd HH:mm"];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     NSString *utcString = [formatter stringFromDate:[NSDate date]];
     _utcLabel.text = [NSString stringWithFormat:@"%@Z", utcString];
@@ -107,7 +116,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
-
 /*
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
@@ -116,9 +124,41 @@
         tableViewHeaderFooterView.textLabel.font = [UIFont boldSystemFontOfSize:17.0f];
     }
 }
+ */
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return ordersArray[section];
+    if (ordersSet.count == 0) {
+        return nil;
+    } else {
+        return @"ATIS";
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (ordersSet.count == 0) {
+        UIImageView *headerImageView = [[UIImageView alloc] init];
+        headerImageView.contentMode = UIViewContentModeScaleAspectFit;
+        //headerImageView.backgroundColor = [UIColor redColor];
+        headerImageView.image = [UIImage imageNamed:@"swipe.png"];
+        return headerImageView;
+    } else {
+        return nil;
+    }
+}
+
+/*
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    return @"";
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(nonnull UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    header.textLabel.numberOfLines = 0;
+    if (ordersSet.count == 0) {
+        header.textLabel.textAlignment = NSTextAlignmentCenter;
+    } else {
+        header.textLabel.textAlignment = NSTextAlignmentLeft;
+    }
 }
  */
 
@@ -152,8 +192,11 @@
                 if (atisDate) {
                     float interval = [atisDate timeIntervalSinceNow];
                     NSInteger minutes = (NSInteger)fabsf(interval / 60.0f);
-                    if (minutes > 999) minutes = 999;
-                    cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+                    if (minutes > 999) {
+                        cell.timeLabel.text = @"999分以上前";
+                    } else {
+                        cell.timeLabel.text = [NSString stringWithFormat:@"%ld分前", minutes];
+                    }
                 }
                 cell.atisLabel.text = [result[0] valueForKey:@"atisdat"];
             }

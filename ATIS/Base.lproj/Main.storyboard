@@ -26,7 +26,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CALL SIGN" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zB-NG-TKJ">
-                                            <rect key="frame" x="16" y="11" width="246" height="21"/>
+                                            <rect key="frame" x="16" y="11" width="225" height="21"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="21" id="pHk-bq-yz6"/>
                                             </constraints>
@@ -41,9 +41,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Um-EO-L11">
-                                            <rect key="frame" x="270" y="11" width="63" height="21"/>
+                                            <rect key="frame" x="249" y="11" width="84" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="63" id="H9M-Dk-MeA"/>
+                                                <constraint firstAttribute="width" constant="84" id="H9M-Dk-MeA"/>
                                                 <constraint firstAttribute="height" constant="21" id="d0Q-WL-Sta"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>

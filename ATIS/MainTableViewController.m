@@ -79,6 +79,13 @@
     [appDelegate saveContext];
      */
     
+    // URLの取得
+    NSURL *url = [NSURL URLWithString:@"http://skyelements.jp/app/ATIS/url.txt"];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    NSString *urlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    [[NSUserDefaults standardUserDefaults] setObject:urlString forKey:@"urlString"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     ordersSet = [NSMutableOrderedSet new];
     
     atisDownloader = [[ATISDownloader alloc] init];
@@ -241,6 +248,7 @@
 
 - (void)didFinishDownloadingATISWithData:(NSData *)data {
     NSArray *atisArray = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    NSLog(@"%@", atisArray);
     for (NSDictionary *atis in atisArray) {
         NSString *callsign = atis[@"callsign"];
         [ordersSet addObject:callsign];

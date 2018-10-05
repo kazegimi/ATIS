@@ -18,8 +18,12 @@
                                                           delegate:self
                                                      delegateQueue:[NSOperationQueue mainQueue]];
     
-    NSString *urlString = @"https://jswpgis.atsri.jp/j-skyway/dbif/loadAtis.php?uid=001";
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]
+    NSString *urlString = [[NSUserDefaults standardUserDefaults] objectForKey:@"urlString"];
+    //urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *url = [NSURL URLWithString:urlString];
+    //urlString = @"https://jswpgis.atsri.jp/j-skyway/dbif/loadAtis.php?uid=013";
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                        timeoutInterval:10.0];
     
